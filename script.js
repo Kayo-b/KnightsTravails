@@ -27,10 +27,8 @@
 
 let grid =  [[0,1,2,3,4,5,6,7],
             [0,1,2,3,4,5,6,7]]
-let gridCoord = [];
+let gridCoordEx = [];
 let position = [];
-let x = 0;
-let y = 0;
 // let count = 0
 
 // while(count < 37) {
@@ -45,7 +43,7 @@ let y = 0;
 
 for(let x = 0; x < 8; x++) {
     for(let y = 0; y < 8;y++) {
-        gridCoord.push([grid[0][x],grid[1][y]])
+        gridCoordEx.push([grid[0][x],grid[1][y]])
     }
 }
 // position = [0,1]
@@ -62,70 +60,41 @@ for(let x = 0; x < 8; x++) {
 //       2.1.2. Add +2 / +1 to each value([2,1]) and run same function with new parameter.
 //    2.2. IF No: return
 
-function recursiveKnight(array) {
-    // console.log
-    // if(array[0] > 7) return;
-    // if(array[1] > 7) return;
-    
+function recursiveKnight(array, gridCoord = gridCoordEx) {
+    if(array[0] > 7) return 
+    if(array[1] > 7) return 
     let temp = array
-    
-    gridCoord.forEach(item => { 
-        if(item[0] === temp[0] && item[1] === temp[1]) {
-            position.push(temp);
-            let newArr1 = [];
-            newArr1.push(temp[0] - 1);
-            newArr1.push(temp[1] - 2);
-            console.log(newArr1)
-            recursiveKnight(newArr1);
-            let newArr2 = [];
-            newArr2.push(temp[0] - 2);
-            newArr2.push(temp[1] - 1);
-            console.log(newArr2)
-            recursiveKnight(newArr2)
-            // let newArr3 = [];
-            // newArr3.push(temp[0] - 2);
-            // newArr3.push(temp[1] - 1);
-            // recursiveKnight(newArr3);
-            // let newArr4 = [];
-            // newArr4.push(temp[0] - 2);
-            // newArr4.push(temp[1] - 1);
-            // recursiveKnight(newArr4);
+        gridCoord.forEach(item => { 
+            if(item[0] === temp[0] && item[1] === temp[1]) {
             
-        }; 
-        
-    });
-    
-
-    return position;
+                // position.push(temp);
+                // let newArr1 = [];
+                // newArr1.push(temp[0] + 1);
+                // newArr1.push(temp[1] + 2);
+                let x = recursiveKnight([temp[0] + 1, temp[1] + 2])
+                if(x != null) temp.push(x);
+                // let newArr2 = [];
+                // newArr2.push(temp[0] + 2);
+                // newArr2.push(temp[1] + 1);
+                let y = recursiveKnight([temp[0] + 2, temp[1] + 1])
+                if(y != null) temp.push(y);
+                // let newArr3 = [];
+                // newArr3.push(temp[0] + 2);
+                // newArr3.push(temp[1] - 1);
+                // recursiveKnight(newArr3);
+                // let newArr4 = [];
+                // newArr4.push(temp[0] - 2);
+                // newArr4.push(temp[1] + 1);
+                // recursiveKnight(newArr4);
+                        
+                }
+            })
+                
+                return temp
 }
+            
 
+let x = recursiveKnight([0,0])
+console.log(x[2][3])
+console.log(JSON.stringify(x))
 
-// }
-console.log(recursiveKnight([7,7]))
-
-// let temp = gridCoord[1]
-// console.log(temp)
-
-    console.log(array[0])
-let arrSum =  [ [ 7, 7 ], [ 6, 5 ], [ 5, 3 ],
-[ 4, 1 ], [ 2, 0 ], [ 3, 2 ],
-[ 2, 0 ], [ 1, 1 ], [ 4, 4 ],
-[ 3, 2 ], [ 2, 0 ], [ 1, 1 ],
-[ 2, 3 ], [ 1, 1 ], [ 0, 2 ],
-[ 5, 6 ], [ 4, 4 ], [ 3, 2 ],
-[ 2, 0 ], [ 1, 1 ], [ 2, 3 ],
-[ 1, 1 ], [ 0, 2 ], [ 3, 5 ],
-[ 2, 3 ], [ 1, 1 ], [ 0, 2 ],
-[ 1, 4 ], [ 0, 2 ],  
-[ 0, 0 ], [ 1, 2 ], [ 2, 4 ],
-[ 3, 6 ], [ 5, 7 ], [ 4, 5 ],
-[ 5, 7 ], [ 6, 6 ], [ 3, 3 ],
-[ 4, 5 ], [ 5, 7 ], [ 6, 6 ],
-[ 5, 4 ], [ 6, 6 ], [ 7, 5 ],
-[ 2, 1 ], [ 3, 3 ], [ 4, 5 ],
-[ 5, 7 ], [ 6, 6 ], [ 5, 4 ],
-[ 6, 6 ], [ 7, 5 ], [ 4, 2 ],
-[ 5, 4 ], [ 6, 6 ], [ 7, 5 ],
-[ 6, 3 ], [ 7, 5 ]]
-
-console.log(arrSum.length)
