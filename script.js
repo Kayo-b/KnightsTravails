@@ -22,30 +22,18 @@
 // y +- 2 && x +- 1 || x +- 2 && y +- 1
 //Figuring out all the possible positions of [x,y]
 //if position [x,y] can be reached from current position adding or subtracting x +- 1 y +- 2 or x+2 y+1, 
-//then both are conected
- 
-
+//then both are connected
 let grid =  [[0,1,2,3,4,5,6,7],
             [0,1,2,3,4,5,6,7]]
 let gridCoordEx = [];
 let position = [];
-// let count = 0
-
-// while(count < 37) {
-//     newArr.push([grid[0][x],grid[1][y]]);
-//     if(x < 6 && y === 6) {
-//         x += 2;
-//         y += 1;
-//     }
-// }
-
-
-
+//Generate all grid coordinates
 for(let x = 0; x < 8; x++) {
     for(let y = 0; y < 8;y++) {
         gridCoordEx.push([grid[0][x],grid[1][y]])
     }
 }
+
 // position = [0,1]
 // position[1] = position[1]+1
 // console.log(position)
@@ -56,45 +44,36 @@ for(let x = 0; x < 8; x++) {
 // 1. execute function with starting point [0,0] as parameter
 // 2. check if parameter value belongs to the chess grid values;
 //    2.1. If Yes: Add value to array > 
-//       2.1.1. Add +1 / +2 to each value([1,2]) and run same function with new parameter.
-//       2.1.2. Add +2 / +1 to each value([2,1]) and run same function with new parameter.
+//       2.1.1. Add +1 / +2 to each value([1,2]) and run same function with new parameter/position.
+//       2.1.2. Add +2 / +1 to each value([2,1]) and run same function with new parameter/position.
 //    2.2. IF No: return
 
+//All possible knight moves;
+let X = [ 2, 1, -1, -2, -2, -1, 1, 2 ];
+let Y = [ 1, 2, 2, 1, -1, -2, -2, -1 ];
+let kmoves = []
 function recursiveKnight(array, gridCoord = gridCoordEx) {
-    if(array[0] > 7) return 
-    if(array[1] > 7) return 
-    let temp = array
+    if(array[0] > 7 || array[1] > 7 || array[0] < 0 || array[1] < 0) return 
+    let temp = array;
         gridCoord.forEach(item => { 
             if(item[0] === temp[0] && item[1] === temp[1]) {
-            
-                // position.push(temp);
-                // let newArr1 = [];
-                // newArr1.push(temp[0] + 1);
-                // newArr1.push(temp[1] + 2);
-                let x = recursiveKnight([temp[0] + 1, temp[1] + 2])
-                if(x != null) temp.push(x);
-                // let newArr2 = [];
-                // newArr2.push(temp[0] + 2);
-                // newArr2.push(temp[1] + 1);
-                let y = recursiveKnight([temp[0] + 2, temp[1] + 1])
-                if(y != null) temp.push(y);
-                // let newArr3 = [];
-                // newArr3.push(temp[0] + 2);
-                // newArr3.push(temp[1] - 1);
-                // recursiveKnight(newArr3);
-                // let newArr4 = [];
-                // newArr4.push(temp[0] - 2);
-                // newArr4.push(temp[1] + 1);
-                // recursiveKnight(newArr4);
-                        
+                let index = gridCoord.indexOf(item)
+                let newGrid = gridCoord;
+                newGrid.splice(index, 1)
+
+                for(let i = 0; i < 8;i++) {
+                    let k2 = recursiveKnight([temp[0] + X[i], temp[1] + Y[i]], newGrid)
+                    if(k2 != undefined) temp.push(k2);
+                    if(k2 != undefined) kmoves.push(k2);
+                }
                 }
             })
-                
-                return temp
+            return temp;
+         
 }
             
 
 let x = recursiveKnight([0,0])
-console.log(x[2][3])
+// console.log(x)
+console.log(kmoves.length)
 console.log(JSON.stringify(x))
-
