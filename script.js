@@ -119,10 +119,13 @@ class KnightGraph {
     }
 
     get(node) {
-        return this.graphList.get(node)
+        return this.graphList.get(JSON.stringify(node))
     }
     delete(node) {
         this.graphList.delete(node)
+    }
+    size() {
+        return this.graphList.size
     }
     printGrapth() {
         let nodesList = this.graphList.keys()
@@ -151,8 +154,16 @@ function createGraphDemo() {
     for(i of vertices) {
         graphDemo.addNode(i)
     }
+    for(let x = 0; x < arrList.length; x++) {
+        for(let y = 1; y < arrList[x].length; y++) {
+        
+            graphDemo.addEdge(JSON.stringify(arrList[x][0]), JSON.stringify(arrList[x][y]))
+        }
+    }
     return graphDemo
 }
+// let cTest = createGraphDemo()
+// console.log(cTest)
 // console.log(arrList[0])
 // console.log(arrList[0][0])
 // console.log(arrList[0][1])
@@ -173,47 +184,100 @@ for(let x = 0; x < arrList.length; x++) {
     }
 }
 //apply a depth first search tree into the graph to find out the shortest path between two points
-let record = ""
-let count = 0
-function depthFirst(startNode, endNode, saveCount = 9999, startNodeSave = startNode) {
-    // if(startNode === undefined) startNode = startNodeSave
-    console.log(startNode)
-    record += startNode + " => ";
-    let adjacentNodes = graphDemo.get(startNode);
-    
-    if(startNode === startNodeSave) {
-        count = 0;
-        record = startNode + "=> ";
-    }
-    count += 1;
-    while(count < 600) {
-    for(let x = 0; x < adjacentNodes.length; x++) {
-        if(adjacentNodes[x] === endNode) {
+// let record = ""
+// let count = 0
 
-            if(saveCount > count) { 
-                console.log(graphDemo)
-                record += adjacentNodes[x]
-                saveCount = count;
-                console.log(saveCount)
-                console.log(record)
-                console.log(count)
-                
-            } 
-            // record += adjacentNodes[x]
-            // console.log(count)
-            // console.log(record)
-            
-           
-        } 
+// function depthFirst(startNode, endNode, saveCount = 9999, startNodeSave = startNode) {
+//     console.log(graphDemo)
+//     record += startNode + " => ";
+//     let adjacentNodes = graphDemo.get(startNode);
+//     // console.log(graphDemo)
+//     // console.log(startNode)
+//     // console.log(adjacentNodes.length)
+//     if(startNode === startNodeSave) {
+//         count = 0;
+//         record = startNode + "=> ";
+//         // graphDemo = createGraphDemo()
+//         // adjacentNodes = graphDemo.get(startNode)
         
-        let tempIndex = adjacentNodes[x];
-        adjacentNodes.splice(x, 1)
-        return depthFirst(tempIndex, endNode, saveCount, startNodeSave);
+//     }
+//     count += 1;
+//     for(let x = 0; x < adjacentNodes.length; x++) {
+//         if(adjacentNodes[x] === endNode) {
 
+//             if(saveCount > count) { 
+//                 console.log(graphDemo)
+//                 record += adjacentNodes[x]
+//                 saveCount = count;
+//                 console.log(saveCount)
+//                 console.log(record)
+//                 console.log(count)
+                
+//             } 
+           
+//         } 
+        
+//         let tempIndex = adjacentNodes[x];
+//         adjacentNodes.splice(x, 1)
+//         return depthFirst(tempIndex, endNode, saveCount, startNodeSave);
+
+//     }
+//     return saveCount
+// }
+// let tst = depthFirst('[1,7]', '[4,4]')
+// console.log(tst)
+
+
+
+//Breadth First Search
+console.log(graphDemo.size())
+
+let g = graphDemo;
+let n = graphDemo.size();
+function BST(startNode, endNode, arr = [], nextNode = startNode, count1 = 0, visited = []) {
+    let adjList = g.get(nextNode);
+    depth = adjList.length;
+    console.log(nextNode)
+   
+    
+    visited.push(JSON.stringify(nextNode))
+    for(let j = 0; j < visited.length; j++) {
+        for(let i = 0; i < adjList.length; i++) {
+            if(visited[j] === adjList[i]) adjList.splice(i,1)
+        }
     }
-    return saveCount
+    console.log(adjList)
+    console.log(count1)
+    if(arr.length < 80) console.log(arr)
+    arr.splice(0,1)
+    if(startNode === endNode) return "a";
+    if(JSON.stringify(nextNode) === JSON.stringify(endNode)) return count1;
+    
+    for(k of adjList) {
+        arr.push(k)
+    }
+    return BST(startNode, endNode, arr, JSON.parse(arr[0]), count1 += 1, visited)
+    //Take first val of adjList > see if its == to endNode > get its Nodes > send its adjNodes to adjList
+    
+    
 }
-}
-let tst = depthFirst('[0,0]', '[7,3]')
-console.log(tst)
+console.log(graphDemo)
+console.log(BST([3,3],[4,3]))
+// let list = g.get([0,0])
+// let arr = []
+// for(k of list) {
+//     arr.push(k)
+// }
 
+// list = g.get(JSON.parse(list[0]))
+// for(k of list) {
+//     arr.push(k)
+// }
+// console.log(arr)
+
+// let y = [1,1]
+// let y2 = JSON.stringify(y)
+// let y3 = JSON.parse(y2)
+// y3 = JSON.stringify(y3)
+
+// console.log(y2 === y3)

@@ -1,6 +1,6 @@
-let mapT = new Map();
-mapT.set(JSON.stringify([2,3]), JSON.stringify([1,2]))
-mapT.set(JSON.stringify([3,1]), JSON.stringify([1,2]))
+let y = [1,1]
+let y2 = JSON.stringify(y)
+let y3 = JSON.parse(y2)
+y3 = JSON.stringify(y3)
 
-console.log(mapT.delete('[3,1]'))
-console.log(mapT)
+console.log(y2 === y3)
