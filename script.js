@@ -124,6 +124,9 @@ class KnightGraph {
     delete(node) {
         this.graphList.delete(node)
     }
+    has(node) {
+        this.graphList.has(node)
+    }
     size() {
         return this.graphList.size
     }
@@ -135,6 +138,19 @@ class KnightGraph {
         }
     }
 }
+
+// let teste = new KnightGraph()
+// teste.addNode('[1,4]')
+// teste.addNode('[3,5]')
+// teste.addNode('[4,3]')
+// teste.addEdge(JSON.stringify([1,4]),JSON.stringify([3,3]))
+// teste.addEdge(JSON.stringify([3,5]),JSON.stringify([1,4]))
+// teste.addEdge(JSON.stringify([4,3]),JSON.stringify([3,5]))
+// let temp1 = teste.get([4,3])
+// let temp2 = teste.get(temp1)
+// console.log(teste.get(temp2))
+// console.log(teste)
+
 
 let grid2 =  [[0,1,2,3,4,5,6,7],
             [0,1,2,3,4,5,6,7]]
@@ -162,6 +178,9 @@ function createGraphDemo() {
     }
     return graphDemo
 }
+
+let graphTest = createGraphDemo()
+console.log(graphTest)
 // let cTest = createGraphDemo()
 // console.log(cTest)
 // console.log(arrList[0])
@@ -232,37 +251,59 @@ for(let x = 0; x < arrList.length; x++) {
 //Breadth First Search
 console.log(graphDemo.size())
 
-let g = graphDemo;
-let n = graphDemo.size();
-function BST(startNode, endNode, arr = [], nextNode = startNode, count1 = 0, visited = []) {
+let g = createGraphDemo()
+let n = g.size();
+function BST(startNode, endNode, arr = [], nextNode = startNode, count1 = 0, visited = [] , reverseGraph = new KnightGraph) {
     let adjList = g.get(nextNode);
-    depth = adjList.length;
-    console.log(nextNode)
-   
-    
+
+
+
     visited.push(JSON.stringify(nextNode))
+    
     for(let j = 0; j < visited.length; j++) {
         for(let i = 0; i < adjList.length; i++) {
             if(visited[j] === adjList[i]) adjList.splice(i,1)
         }
     }
+    console.log(nextNode)
     console.log(adjList)
-    console.log(count1)
-    if(arr.length < 80) console.log(arr)
+    // console.log("visited")
+    // console.log(visited)
+    // console.log("array")
+    // console.log(arr)
+    
     arr.splice(0,1)
     if(startNode === endNode) return "a";
-    if(JSON.stringify(nextNode) === JSON.stringify(endNode)) return count1;
-    
+    if(JSON.stringify(nextNode) === JSON.stringify(endNode)) {
+        
+        let returnVal = reverseGraph.get(endNode)
+        let retArray = []
+        
+        while(returnVal != undefined) {
+            returnVal = reverseGraph.get(returnVal[0])
+            retArray.unshift(returnVal)
+            retArray.filter((x) => x == Array)
+            
+        }
+        return retArray;
+    } 
+   
     for(k of adjList) {
-        arr.push(k)
+        arr.push(k);
+        visited.push(k)
+        reverseGraph.addNode(k)
+        reverseGraph.addEdge(k, nextNode);
+        
     }
-    return BST(startNode, endNode, arr, JSON.parse(arr[0]), count1 += 1, visited)
+    
+    return BST(startNode, endNode, arr, JSON.parse(arr[0]), count1 += 1, visited,reverseGraph)
     //Take first val of adjList > see if its == to endNode > get its Nodes > send its adjNodes to adjList
-    
-    
 }
-console.log(graphDemo)
+
 console.log(BST([3,3],[4,3]))
+
+
+
 // let list = g.get([0,0])
 // let arr = []
 // for(k of list) {
@@ -281,3 +322,9 @@ console.log(BST([3,3],[4,3]))
 // y3 = JSON.stringify(y3)
 
 // console.log(y2 === y3)
+
+//add origin node at first index of arrays
+//when destination is found, take its origin node and recursively go back until the startNode is found
+
+// console.log(g.get([3,5]))
+// console.log(layers)
